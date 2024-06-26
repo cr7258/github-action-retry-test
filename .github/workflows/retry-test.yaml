@@ -6,12 +6,17 @@ on:
 
 jobs:
   test-retry:
-    uses: nick-fields/retry@v3
-    with:
-      timeout_minutes: 10
-      max_attempts: 3
-      command: | 
-        echo "Hello, World!"
-        exit 2
-        echo "This line will not be executed"
-        echo "This line will not be executed 2"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: test retry
+        uses: nick-fields/retry@v3
+        with:
+          timeout_minutes: 10
+          max_attempts: 3
+          command: |
+            echo "Hello, World!"
+            exit 2
+            echo "This line will not be executed"
+            echo "This line will not be executed 2"
+   
