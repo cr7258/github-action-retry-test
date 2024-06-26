@@ -9,53 +9,54 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-#      - name: test retry
-#        run: |
-#          # 设置最大重试次数
-#          MAX_RETRIES=3
-#
-#          # 设置重试之间的等待时间（秒）
-#          WAIT_TIME=5
-#
-#          # 初始化重试计数器
-#          retry_count=0
-#
-#          while [[ $retry_count -lt $MAX_RETRIES ]]; do
-#              echo "Attempt $((retry_count + 1)) of $MAX_RETRIES"
-#
-#              # 执行 make 命令
-#              make fail
-#
-#              # 检查 make 命令的退出状态
-#              if [ $? -eq 0 ]; then
-#                  echo "Make command succeeded on attempt $((retry_count + 1))"
-#                  exit 0
-#              else
-#                  echo "Make command failed on attempt $((retry_count + 1))"
-#
-#                  # 增加重试计数
-#                  ((retry_count++))
-#
-#                  # 如果还没到最后一次尝试，则等待后重试
-#                  if [ $retry_count -lt $MAX_RETRIES ]; then
-#                      echo "Retrying in $WAIT_TIME seconds..."
-#                      sleep $WAIT_TIME
-#                  fi
-#              fi
-#          done
-#
-#          echo "Make command failed after $MAX_RETRIES attempts"
-#          exit 1
       - name: test retry
-        uses: nick-fields/retry@v3
-        with:
-          timeout_minutes: 10
-          max_attempts: 3
-          retry_on: error
-          command: |
-            echo "Hello, World 1!"
-            echo "Hello, World 2!"
-            make fail
-            echo "This line will not be executed"
-            echo "This line will not be executed 2"
+        run: |
+          # 设置最大重试次数
+          MAX_RETRIES=3
+
+          # 设置重试之间的等待时间（秒）
+          WAIT_TIME=5
+
+          # 初始化重试计数器
+          retry_count=0
+
+          while [[ $retry_count -lt $MAX_RETRIES ]]; do
+              echo "Attempt $((retry_count + 1)) of $MAX_RETRIES"
+
+              # 执行 make 命令
+              make fail
+              result=$?
+
+              # 检查 make 命令的退出状态
+              if [ $result -eq 0 ]; then
+                  echo "Make command succeeded on attempt $((retry_count + 1))"
+                  exit 0
+              else
+                  echo "Make command failed on attempt $((retry_count + 1))"
+
+                  # 增加重试计数
+                  ((retry_count++))
+
+                  # 如果还没到最后一次尝试，则等待后重试
+                  if [ $retry_count -lt $MAX_RETRIES ]; then
+                      echo "Retrying in $WAIT_TIME seconds..."
+                      sleep $WAIT_TIME
+                  fi
+              fi
+          done
+
+          echo "Make command failed after $MAX_RETRIES attempts"
+          exit 1
+#      - name: test retry
+#        uses: nick-fields/retry@v3
+#        with:
+#          timeout_minutes: 10
+#          max_attempts: 3
+#          retry_on: error
+#          command: |
+#            echo "Hello, World 1!"
+#            echo "Hello, World 2!"
+#            make fail
+#            echo "This line will not be executed"
+#            echo "This line will not be executed 2"
 
