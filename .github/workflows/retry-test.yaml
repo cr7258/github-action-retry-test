@@ -51,6 +51,7 @@ jobs:
         with:
           timeout_minutes: 10
           max_attempts: 3
+          retry_on: error
           command: |
             echo "Hello, World 1!"
             echo "Hello, World 2!"
