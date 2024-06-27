@@ -12,6 +12,7 @@ jobs:
       - name: test retry
         shell: bash
         run: |
+            set +e 
             # 设置最大重试次数
             MAX_RETRIES=3
             
